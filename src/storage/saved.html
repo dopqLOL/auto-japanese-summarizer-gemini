@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>保存済み要約 | Auto Japanese Summarizer</title>
+  <link rel="stylesheet" href="saved.css">
+</head>
+<body>
+  <div class="saved-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="app-title">
+          <span class="icon">🌸</span>
+          <span class="title-text">保存済み要約</span>
+        </h1>
+        <div class="header-actions">
+          <button id="sync-button" class="header-button" title="同期">
+            <span>🔄</span>
+          </button>
+          <button id="export-all-button" class="header-button" title="すべてエクスポート">
+            <span>📤</span>
+          </button>
+          <button id="settings-button" class="header-button" title="設定に戻る">
+            <span>⚙️</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Search and Filter Bar -->
+      <div class="search-bar">
+        <div class="search-input-container">
+          <input type="text" id="search-input" class="search-input" placeholder="検索...">
+          <button id="search-button" class="search-button">
+            <span>🔍</span>
+          </button>
+        </div>
+        
+        <div class="filter-controls">
+          <div class="filter-group">
+            <label for="date-filter" class="filter-label">期間:</label>
+            <select id="date-filter" class="filter-select">
+              <option value="all">すべて</option>
+              <option value="today">今日</option>
+              <option value="week">今週</option>
+              <option value="month">今月</option>
+              <option value="custom">カスタム...</option>
+            </select>
+          </div>
+          
+          <div class="filter-group" id="custom-date-range" style="display:none;">
+            <label for="date-from" class="filter-label">開始:</label>
+            <input type="date" id="date-from" class="date-input">
+            <label for="date-to" class="filter-label">終了:</label>
+            <input type="date" id="date-to" class="date-input">
+            <button id="apply-date-range" class="apply-button">適用</button>
+          </div>
+          
+          <div class="filter-group">
+            <label for="sort-order" class="filter-label">並び順:</label>
+            <select id="sort-order" class="filter-select">
+              <option value="newest">新しい順</option>
+              <option value="oldest">古い順</option>
+              <option value="title-asc">タイトル (A-Z)</option>
+              <option value="title-desc">タイトル (Z-A)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Results Stats -->
+      <div class="results-stats">
+        <span id="results-count">0件の要約</span>
+        <div class="view-controls">
+          <button id="grid-view-button" class="view-button active" title="グリッド表示">
+            <span>▦</span>
+          </button>
+          <button id="list-view-button" class="view-button" title="リスト表示">
+            <span>☰</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Grid -->
+      <div id="summaries-container" class="summaries-grid">
+        <!-- 要約カードはJavaScriptで動的に生成 -->
+      </div>
+      
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state">
+        <div class="empty-state-icon">📝</div>
+        <h2 class="empty-state-title">保存済み要約はありません</h2>
+        <p class="empty-state-description">
+          記事を要約して保存するか、以前のバックアップからデータをインポートしてください。
+        </p>
+        <button id="create-summary-button" class="primary-button">
+          <span class="button-icon">✨</span>
+          <span class="button-text">新しい要約を作成</span>
+        </button>
+        <button id="import-data-button" class="secondary-button">
+          <span class="button-icon">📥</span>
+          <span class="button-text">データをインポート</span>
+        </button>
+      </div>
+      
+      <!-- Loading State -->
+      <div id="loading-state" class="loading-state" style="display:none;">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">要約を読み込み中...</p>
+      </div>
+    </main>
+
+    <!-- Summary Detail Modal -->
+    <div id="summary-modal" class="modal" aria-hidden="true">
+      <div class="modal-overlay"></div>
+      <div class="modal-container">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title">要約タイトル</h2>
+          <button class="modal-close-button" id="modal-close">✕</button>
+        </div>
+        <div class="modal-content">
+          <div class="summary-meta">
+            <div class="meta-item">
+              <span class="meta-label">URL:</span>
+              <a href="#" id="modal-url" target="_blank" class="meta-value meta-url">URLがありません</a>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">作成日:</span>
+              <span id="modal-date" class="meta-value">--</span>
+            </div>
+          </div>
+          
+          <div class="summary-keywords" id="modal-keywords">
+            <!-- キーワードタグはJavaScriptで動的に生成 -->
+          </div>
+          
+          <div class="summary-content">
+            <h3 class="content-label">要約内容:</h3>
+            <div id="modal-content" class="content-body">
+              <!-- 要約内容はJavaScriptで動的に設定 -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="modal-edit" class="modal-button">
+            <span class="button-icon">✏️</span>
+            <span class="button-text">編集</span>
+          </button>
+          <button id="modal-export" class="modal-button">
+            <span class="button-icon">📤</span>
+            <span class="button-text">エクスポート</span>
+          </button>
+          <button id="modal-delete" class="modal-button danger">
+            <span class="button-icon">🗑️</span>
+            <span class="button-text">削除</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal" aria-hidden="true">
+      <div class="modal-overlay"></div>
+      <div class="modal-container confirmation-modal">
+        <div class="modal-header">
+          <h2 class="modal-title">要約を削除</h2>
+          <button class="modal-close-button" id="delete-modal-close">✕</button>
+        </div>
+        <div class="modal-content">
+          <p class="confirmation-message">この要約を完全に削除してもよろしいですか？この操作は元に戻せません。</p>
+        </div>
+        <div class="modal-footer">
+          <button id="delete-cancel" class="modal-button">
+            <span class="button-text">キャンセル</span>
+          </button>
+          <button id="delete-confirm" class="modal-button danger">
+            <span class="button-icon">🗑️</span>
+            <span class="button-text">削除する</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden File Input for Import -->
+    <input type="file" id="import-file" accept=".json" style="display: none;">
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-info">
+          <span class="version">Auto Japanese Summarizer v1.0.0</span>
+          <span class="powered-by">Powered by Google Gemini 2.5 Flash</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="saved.js"></script>
+</body>
+</html> 

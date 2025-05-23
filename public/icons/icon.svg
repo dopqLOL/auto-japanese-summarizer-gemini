@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976D2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGradient)" stroke="#fff" stroke-width="3"/>
+  
+  <!-- Document Icon (Left Side) -->
+  <rect x="20" y="35" width="30" height="40" rx="3" fill="#fff" stroke="none"/>
+  <line x1="25" y1="42" x2="45" y2="42" stroke="#1976D2" stroke-width="1.5"/>
+  <line x1="25" y1="48" x2="45" y2="48" stroke="#1976D2" stroke-width="1.5"/>
+  <line x1="25" y1="54" x2="45" y2="54" stroke="#1976D2" stroke-width="1.5"/>
+  <line x1="25" y1="60" x2="42" y2="60" stroke="#1976D2" stroke-width="1.5"/>
+  <line x1="25" y1="66" x2="40" y2="66" stroke="#1976D2" stroke-width="1.5"/>
+  
+  <!-- Arrow -->
+  <path d="M55 60 L70 55 L70 58 L78 58 L78 62 L70 62 L70 65 Z" fill="#fff"/>
+  
+  <!-- Summary Icon (Right Side) -->
+  <rect x="83" y="45" width="25" height="30" rx="3" fill="#fff" stroke="none"/>
+  <line x1="87" y1="52" x2="104" y2="52" stroke="#1976D2" stroke-width="2"/>
+  <line x1="87" y1="58" x2="100" y2="58" stroke="#1976D2" stroke-width="2"/>
+  <line x1="87" y1="64" x2="102" y2="64" stroke="#1976D2" stroke-width="2"/>
+  
+  <!-- Japanese Character 要 (Summary) -->
+  <text x="64" y="100" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">要約</text>
+</svg> 

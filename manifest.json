@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Japanese Summarizer - Gemini",
+  "version": "1.0.0",
+  "description": "Automatically extract and summarize Japanese text from web pages using Google Gemini 2.5 Flash API.",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "declarativeNetRequest"
+  ],
+  
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "src/background/background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content.js"]
+    }
+  ],
+  
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Japanese Text Summarizer",
+    "default_icon": {
+      "16": "public/icons/icon.svg",
+      "32": "public/icons/icon.svg",
+      "48": "public/icons/icon.svg",
+      "128": "public/icons/icon.svg"
+    }
+  },
+  
+  "options_page": "src/options/options.html",
+  
+  "icons": {
+    "16": "public/icons/icon.svg",
+    "32": "public/icons/icon.svg", 
+    "48": "public/icons/icon.svg",
+    "128": "public/icons/icon.svg"
+  },
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'self'; img-src 'self' data:;"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/*.js", "src/popup/*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+} 

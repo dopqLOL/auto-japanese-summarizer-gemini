@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Japanese Summarizer - 設定</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="app-title">
+          <span class="icon">🌸</span>
+          <span class="title-text">Auto Summary</span>
+          <span class="subtitle">設定</span>
+        </h1>
+        <div class="header-actions">
+          <button id="export-settings" class="header-button" title="設定をエクスポート">
+            <span>📤</span>
+          </button>
+          <button id="import-settings" class="header-button" title="設定をインポート">
+            <span>📥</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Progress Indicator -->
+      <div class="setup-progress">
+        <div class="progress-steps">
+          <div class="step" id="api-step">
+            <span class="step-icon">🔑</span>
+            <span class="step-label">API設定</span>
+            <span class="step-status" id="api-status">未完了</span>
+          </div>
+          <div class="step" id="summary-step">
+            <span class="step-icon">📝</span>
+            <span class="step-label">要約設定</span>
+            <span class="step-status" id="summary-status">任意</span>
+          </div>
+          <div class="step" id="ready-step">
+            <span class="step-icon">✅</span>
+            <span class="step-label">準備完了</span>
+            <span class="step-status" id="ready-status">未完了</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Sections -->
+      <div class="settings-sections">
+        
+        <!-- API Settings Section (Always Expanded Initially) -->
+        <section class="settings-section" id="api-section">
+          <div class="section-header" data-section="api" aria-expanded="true">
+            <div class="section-info">
+              <span class="section-icon">🔑</span>
+              <h2 class="section-title">API設定</h2>
+              <span class="section-badge required">必須</span>
+            </div>
+            <div class="section-status">
+              <span class="status-indicator" id="api-indicator">未設定</span>
+              <span class="collapse-icon">▲</span>
+            </div>
+          </div>
+          
+          <div class="section-content expanded" id="api-content">
+            <div class="setting-group">
+              <label for="api-key" class="setting-label">
+                Google Gemini API キー
+                <a href="https://makersuite.google.com/app/apikey" target="_blank" class="help-link">
+                  <span>❓</span> 取得方法
+                </a>
+              </label>
+              <div class="input-group">
+                <input 
+                  type="password" 
+                  id="api-key" 
+                  class="api-input" 
+                  placeholder="AIzaSy..." 
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <button type="button" id="toggle-api-visibility" class="toggle-button" title="表示/非表示">
+                  <span>👁️</span>
+                </button>
+                <button type="button" id="test-connection" class="test-button" disabled>
+                  <span>🔄</span> テスト
+                </button>
+              </div>
+              <div class="input-feedback" id="api-feedback"></div>
+            </div>
+
+            <div class="setting-group">
+              <div class="setting-info">
+                <h3 class="info-title">接続状況</h3>
+                <div class="connection-status" id="connection-status">
+                  <div class="status-item">
+                    <span class="status-label">状態:</span>
+                    <span class="status-value" id="connection-state">未接続</span>
+                  </div>
+                  <div class="status-item">
+                    <span class="status-label">レスポンス時間:</span>
+                    <span class="status-value" id="response-time">--</span>
+                  </div>
+                  <div class="status-item">
+                    <span class="status-label">最終確認:</span>
+                    <span class="status-value" id="last-check">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <div class="setting-info">
+                <h3 class="info-title">利用状況</h3>
+                <div class="usage-info" id="usage-info">
+                  <div class="usage-meter">
+                    <div class="meter-label">今月の使用量</div>
+                    <div class="meter-bar">
+                      <div class="meter-fill" id="usage-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="meter-text">
+                      <span id="usage-current">--</span> / <span id="usage-limit">--</span> requests
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Summary Settings Section -->
+        <section class="settings-section" id="summary-section">
+          <div class="section-header" data-section="summary" aria-expanded="false">
+            <div class="section-info">
+              <span class="section-icon">📝</span>
+              <h2 class="section-title">要約設定</h2>
+              <span class="section-badge optional">任意</span>
+            </div>
+            <div class="section-status">
+              <span class="status-indicator" id="summary-indicator">デフォルト</span>
+              <span class="collapse-icon">▼</span>
+            </div>
+          </div>
+          
+          <div class="section-content" id="summary-content">
+            <div class="setting-group">
+              <label for="summary-length" class="setting-label">要約の長さ</label>
+              <select id="summary-length" class="select-input">
+                <option value="short">短い (50-100文字)</option>
+                <option value="medium" selected>中程度 (100-200文字)</option>
+                <option value="long">長い (200-300文字)</option>
+                <option value="detailed">詳細 (300文字以上)</option>
+              </select>
+              <div class="input-description">
+                記事の内容に応じて要約の長さを調整します。
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <label for="summary-style" class="setting-label">要約スタイル</label>
+              <select id="summary-style" class="select-input">
+                <option value="bullet" selected>箇条書き</option>
+                <option value="paragraph">段落形式</option>
+                <option value="structured">構造化 (見出し付き)</option>
+                <option value="executive">エグゼクティブサマリー</option>
+              </select>
+              <div class="input-description">
+                要約の表現スタイルを選択できます。
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <label for="output-format" class="setting-label">出力形式</label>
+              <select id="output-format" class="select-input">
+                <option value="plain" selected>プレーンテキスト</option>
+                <option value="markdown">Markdown</option>
+                <option value="html">HTML</option>
+              </select>
+              <div class="input-description">
+                保存・エクスポート時の形式を指定します。
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="include-keywords" checked>
+                  <span class="checkbox-custom"></span>
+                  キーワードを抽出して表示
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="include-metadata">
+                  <span class="checkbox-custom"></span>
+                  メタデータ（日時、URL等）を含める
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="auto-save">
+                  <span class="checkbox-custom"></span>
+                  要約を自動保存
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Data Management Section -->
+        <section class="settings-section" id="data-section">
+          <div class="section-header" data-section="data" aria-expanded="false">
+            <div class="section-info">
+              <span class="section-icon">💾</span>
+              <h2 class="section-title">データ管理</h2>
+              <span class="section-badge optional">任意</span>
+            </div>
+            <div class="section-status">
+              <span class="status-indicator" id="data-indicator">0件保存</span>
+              <span class="collapse-icon">▼</span>
+            </div>
+          </div>
+          
+          <div class="section-content" id="data-content">
+            <div class="setting-group">
+              <div class="data-overview">
+                <h3 class="info-title">保存データの概要</h3>
+                <div class="data-stats">
+                  <div class="stat-item">
+                    <span class="stat-label">保存済み要約:</span>
+                    <span class="stat-value" id="total-summaries">0件</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">使用容量:</span>
+                    <span class="stat-value" id="storage-usage">0 KB</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">最新保存:</span>
+                    <span class="stat-value" id="last-saved">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <div class="action-buttons">
+                <button id="open-saved-summaries" class="action-button primary">
+                  <span>📚</span>
+                  <span>保存済み要約を表示</span>
+                </button>
+                <button id="export-all-data" class="action-button">
+                  <span>📤</span>
+                  <span>全データをエクスポート</span>
+                </button>
+                <button id="import-data" class="action-button">
+                  <span>📥</span>
+                  <span>データをインポート</span>
+                </button>
+                <button id="clear-all-data" class="action-button danger">
+                  <span>🗑️</span>
+                  <span>全データを削除</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="backup-enabled" checked>
+                  <span class="checkbox-custom"></span>
+                  定期的なバックアップを有効化
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="sync-enabled">
+                  <span class="checkbox-custom"></span>
+                  Chromeアカウント間での同期
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Display Settings Section -->
+        <section class="settings-section" id="display-section">
+          <div class="section-header" data-section="display" aria-expanded="false">
+            <div class="section-info">
+              <span class="section-icon">🎨</span>
+              <h2 class="section-title">表示設定</h2>
+              <span class="section-badge optional">任意</span>
+            </div>
+            <div class="section-status">
+              <span class="status-indicator" id="display-indicator">デフォルト</span>
+              <span class="collapse-icon">▼</span>
+            </div>
+          </div>
+          
+          <div class="section-content" id="display-content">
+            <div class="setting-group">
+              <label for="theme-select" class="setting-label">テーマ</label>
+              <select id="theme-select" class="select-input">
+                <option value="auto" selected>システム設定に従う</option>
+                <option value="light">ライトテーマ</option>
+                <option value="dark">ダークテーマ</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label for="font-size" class="setting-label">文字サイズ</label>
+              <select id="font-size" class="select-input">
+                <option value="small">小</option>
+                <option value="medium" selected>中</option>
+                <option value="large">大</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="show-notifications" checked>
+                  <span class="checkbox-custom"></span>
+                  デスクトップ通知を表示
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="show-keyboard-shortcuts">
+                  <span class="checkbox-custom"></span>
+                  キーボードショートカットを有効化
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="minimize-popup">
+                  <span class="checkbox-custom"></span>
+                  要約完了後にポップアップを自動で閉じる
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Save Button -->
+      <div class="save-section">
+        <button id="save-settings" class="save-button" disabled>
+          <span class="save-icon">💾</span>
+          <span class="save-text">設定を保存</span>
+        </button>
+        <div class="save-status" id="save-status"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-info">
+          <span class="version">Auto Japanese Summarizer v1.0.0</span>
+          <span class="powered-by">Powered by Google Gemini 2.5 Flash</span>
+        </div>
+        <div class="footer-links">
+          <a href="#" id="help-link">ヘルプ</a>
+          <a href="#" id="feedback-link">フィードバック</a>
+          <a href="#" id="privacy-link">プライバシー</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Hidden File Input for Import -->
+  <input type="file" id="import-file" accept=".json" style="display: none;">
+
+  <!-- Scripts -->
+  <script src="options.js"></script>
+</body>
+</html> 
